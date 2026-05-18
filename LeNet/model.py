@@ -13,6 +13,7 @@ class LeNet(nn.Module):
         self.s4 = nn.AvgPool2d(kernel_size=2,stride=2)
 
         self.flatten = nn.Flatten()
+
         self.f5 = nn.Linear(400,120)
         self.f6 = nn.Linear(120,84)
         self.f7 = nn.Linear(84,10)
@@ -31,7 +32,9 @@ class LeNet(nn.Module):
         x = self.flatten(x)
         #全连接
         x = self.f5(x)
+        x = self.sig(x)
         x = self.f6(x)
+        x = self.sig(x)
         x = self.f7(x)
 
         #返回前向传播结果

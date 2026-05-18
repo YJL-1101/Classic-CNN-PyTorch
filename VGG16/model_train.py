@@ -8,14 +8,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from get_dataset import train_loader
-from model import AlexNet
+from model import VGG16
 import torch
 from torch import nn
 import pandas as pd
 #数据（训练集，测试集）处理
 def data_process():
     transform = transforms.Compose([
-        transforms.Resize((227, 227)),
+        transforms.Resize((224, 224)),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
@@ -25,13 +25,13 @@ def data_process():
 
     #加载
     train_data_loader = Data.DataLoader(dataset=train_data,
-                                   batch_size=64,
+                                   batch_size=128,
                                    shuffle=True,
                                    num_workers=0)
 
 
     val_data_loader = Data.DataLoader(dataset=val_data,
-                                   batch_size=64,
+                                   batch_size=128,
                                    shuffle=True,
                                    num_workers=0)
 
@@ -162,7 +162,7 @@ def train_model_process(model,train_data_loader,val_data_loader,num_epochs):
 
 
 #把训练过程中的 loss 和 accuracy 画成两张图
-def matplot_acc_loss(train_process):
+def matplot_acc_loss(train_process,save_path="./train_acc_loss.png"):
     # 显示每一次迭代后的训练集和验证集的损失函数和准确率
     plt.figure(figsize=(12, 4))
 
@@ -181,14 +181,19 @@ def matplot_acc_loss(train_process):
     plt.xlabel("epoch")
     plt.ylabel("acc")
     plt.legend()
+
+    # 保存图片
+    plt.savefig(save_path)
+    print(f"训练曲线已保存到 {save_path}")
+
     plt.show()
 
 if __name__ == "__main__":
     #模型实例化
-    AlexNet = AlexNet()
+    VGG16 = VGG16()
     #加载数据
     train_data_loader,val_data_loader = data_process()
     #训练模型
-    train_process = train_model_process(AlexNet,train_data_loader,val_data_loader,20)
+    train_process = train_model_process(VGG16,train_data_loader,val_data_loader,20)
     #画图
-    matplot_acc_loss(train_process)
+    matplot_acc_loss(train_process,save_path="./VGG16_train_acc_loss.png")

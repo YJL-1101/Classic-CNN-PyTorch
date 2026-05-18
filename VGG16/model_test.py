@@ -2,7 +2,7 @@ from torchvision.datasets import CIFAR10
 from torchvision import transforms
 import torch.utils.data as Data
 import torch
-from model import AlexNet
+from model import VGG16
 
 def test_data_process():
     # 加载测试数据集
@@ -46,7 +46,7 @@ def test_model_process(model,test_data_loader):
 
             test_num += test_data_x.size(0)
 
-    test_acc = test_ac_num.double().item() / test_num
+    test_acc = test_ac_num.double().cpu().item() / test_num
     print("测试准确率：",test_acc)
 
 #测试过程中打印单张图的测试结果
@@ -96,10 +96,11 @@ def test_model_process_v2(model,test_data_loader):
     print("测试准确率：",test_acc)
 
 
+
 if __name__=="__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    model = AlexNet()
+    model = VGG16()
 
     model.load_state_dict(torch.load("best_model.pth", map_location=device))
 
