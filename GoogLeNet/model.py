@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-from torch.nn import Sequential
 from torchsummary import summary
 
 #定义inception块
